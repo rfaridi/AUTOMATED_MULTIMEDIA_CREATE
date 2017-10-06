@@ -7,3 +7,9 @@ The above is a good one, how to add stuff to graphics
 
 
 The above chronicles how the magick has chronicled into truly magical package
+
+
+[US Animations Drought](https://rud.is/b/2016/07/27/u-s-drought-animations-with-the-witchs-brew-purrr-broom-magick/)
+
+
+
