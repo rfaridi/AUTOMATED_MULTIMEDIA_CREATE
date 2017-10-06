@@ -1,0 +1,75 @@
+
+```{r setup, include=FALSE, echo=FALSE  }
+library(knitr)
+opts_chunk$set(
+	       warning=FALSE, 
+	       comment=NA,
+	       message=FALSE)
+```
+
+
+Now i am  startign to replicate daniel hadely code found [here](http://danielphadley.com/ggplot-Logo/)
+
+
+
+here we go
+
+
+let' first load the required libraries
+
+```{r libs  }
+library(ggplot2)
+library(magick)
+library(magrittr)
+```
+
+Let's make the ggplot first
+
+
+```{r ggp  }
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point() + 
+  ggtitle("Cars")  + 
+
+  ggsave(filename=paste0("./FIGURES/",last_plot()$labels$title,".png"),
+	width=5, height=4, dpi=300 
+	 )
+```
+
+Now time to read the saved image
+
+```{r si  }
+plot <- image_read("./FIGURES/Cars.png")
+```
+
+Now let's bring in a logo
+
+```{r lg  }
+logo_raw <- image_read("http://hexb.in/hexagons/ggplot2.png") 
+```
+
+now i will show different transformation, it could have been done in one go by piping but went ahead and did it break down for better understanding
+
+first up scaling
+
+```{r sc  }
+logo_raw %>% 
+    image_scale("100") %>% 
+    image_display()
+```
+
+basically the above will rescale the image into width of 100px and height will change accordingly
+
+
+
+now changing the background
+
+```{r bc  }
+logo_raw %>% 
+    image_background("grey", flatten=TRUE) %>% 
+    image_display()
+```
+
+
+
+
