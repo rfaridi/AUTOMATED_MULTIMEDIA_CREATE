@@ -1,0 +1,89 @@
+<p>Now i am startign to replicate daniel hadely code found <a href="http://danielphadley.com/ggplot-Logo/">here</a></p>
+<p>here we go</p>
+<p>let' first load the required libraries</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(magick)
+<span class="kw">library</span>(magrittr)</code></pre></div>
+<p>Let's make the ggplot first</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(displ, hwy, <span class="dt">colour =</span> class)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Cars&quot;</span>)  +<span class="st"> </span>
+
+<span class="st">  </span><span class="kw">ggsave</span>(<span class="dt">filename=</span><span class="kw">paste0</span>(<span class="st">&quot;./FIGURES/&quot;</span>,<span class="kw">last_plot</span>()$labels$title,<span class="st">&quot;.png&quot;</span>),
+    <span class="dt">width=</span><span class="dv">5</span>, <span class="dt">height=</span><span class="dv">4</span>, <span class="dt">dpi=</span><span class="dv">300</span> 
+     )</code></pre></div>
+<div class="figure">
+<img src="figure/ggp-1.png" alt="plot of chunk ggp" />
+<p class="caption">plot of chunk ggp</p>
+</div>
+<p>Now time to read the saved image</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot &lt;-<span class="st"> </span><span class="kw">image_read</span>(<span class="st">&quot;./FIGURES/Cars.png&quot;</span>)</code></pre></div>
+<p>Now let's bring in a logo</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw &lt;-<span class="st"> </span><span class="kw">image_read</span>(<span class="st">&quot;http://hexb.in/hexagons/ggplot2.png&quot;</span>) 
+<span class="kw">image_write</span>(logo_raw,<span class="st">&quot;./FIGURES/logo.png&quot;</span>)</code></pre></div>
+<p>now i will show different transformation, it could have been done in one go by piping but went ahead and did it break down for better understanding</p>
+<p>first up scaling</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw &lt;-<span class="st"> </span><span class="kw">image_read</span>(<span class="st">&quot;./FIGURES/logo.png&quot;</span>)
+logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_scale</span>(<span class="st">&quot;100&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_write</span>(<span class="st">&quot;./FIGURES/logo_scle.png&quot;</span>)</code></pre></div>
+<p>Original figure was <img src="./FIGURES/logo.png" alt="original" /></p>
+<p>after rescaling, we end up with</p>
+<div class="figure">
+<img src="./FIGURES/logo_scle.png" alt="scaled" />
+<p class="caption">scaled</p>
+</div>
+<p>basically the above will rescale the image into width of 100px and height will change accordingly</p>
+<p>now changing the background</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_background</span>(<span class="st">&quot;grey&quot;</span>, <span class="dt">flatten=</span><span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_display</span>()</code></pre></div>
+<pre><code>  format width height colorspace filesize
+1    PNG   181    210       sRGB        0</code></pre>
+<p>now time to add some border</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_border</span>(<span class="st">&quot;grey&quot;</span>, <span class="st">&quot;50x20&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_display</span>()</code></pre></div>
+<pre><code>  format width height colorspace filesize
+1    PNG   281    250       sRGB        0</code></pre>
+<p>the above is pretty obvious, grey back ground with 50px left and right, 20px top and bottom, now let try different border for different sides</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_border</span>(<span class="st">&quot;grey&quot;</span>, <span class="st">&quot;20x10x30x10&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_display</span>()</code></pre></div>
+<pre><code>  format width height colorspace filesize
+1    PNG   221    230       sRGB        0</code></pre>
+<p>ah great it just works, awesome</p>
+<p>now time to add some text</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_border</span>(<span class="st">&quot;grey&quot;</span>,<span class="st">&quot;50x30&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_background</span>(<span class="st">&quot;grey&quot;</span>, <span class="dt">flatten=</span><span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_annotate</span>(<span class="st">&quot;R magick&quot;</span>,<span class="dt">size=</span><span class="dv">30</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_display</span>()</code></pre></div>
+<pre><code>  format width height colorspace filesize
+1    PNG   281    270       sRGB        0</code></pre>
+<p>let's check out position of the text, by default it starts from top left. Let's say we want to put it in the bottom left. there is the option called &quot;gravity&quot;.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_border</span>(<span class="st">&quot;grey&quot;</span>,<span class="st">&quot;50x30&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_background</span>(<span class="st">&quot;grey&quot;</span>, <span class="dt">flatten=</span><span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_annotate</span>(<span class="st">&quot;R magick&quot;</span>,
+           <span class="dt">size=</span><span class="dv">30</span>, 
+           <span class="dt">color=</span><span class="st">&quot;red&quot;</span>,
+           <span class="dt">gravity=</span><span class="st">&quot;southwest&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_display</span>()</code></pre></div>
+<pre><code>  format width height colorspace filesize
+1    PNG   281    270       sRGB        0</code></pre>
+<p>apart from &quot;gravity&quot; there is another option called location, which we are going to try next</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logo_raw %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_border</span>(<span class="st">&quot;grey&quot;</span>,<span class="st">&quot;50x30&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_background</span>(<span class="st">&quot;grey&quot;</span>, <span class="dt">flatten=</span><span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_annotate</span>(<span class="st">&quot;R magick&quot;</span>,
+           <span class="dt">size=</span><span class="dv">30</span>, 
+           <span class="dt">color=</span><span class="st">&quot;red&quot;</span>,
+           <span class="dt">degrees=</span><span class="dv">60</span>,
+           <span class="dt">location=</span><span class="st">&quot;+100+150&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">image_display</span>()</code></pre></div>
+<pre><code>  format width height colorspace filesize
+1    PNG   281    270       sRGB        0</code></pre>
+<p>first look at the option of location. it is the x-axis and y-axis coordinates from the topleft. so y-axis positive value actually goes down. it may change with the gravity option.</p>
+<p>degree option changes angle, postive and negative both values will work.</p>
+<p>Next up we will see how to combine the logo with the main plot, animation and then incorporate gif in a plot.</p>

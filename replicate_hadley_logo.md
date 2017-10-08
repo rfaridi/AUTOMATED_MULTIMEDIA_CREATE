@@ -1,11 +1,5 @@
 
-```{r setup, include=FALSE, echo=FALSE  }
-library(knitr)
-opts_chunk$set(
-	       warning=FALSE, 
-	       comment=NA,
-	       message=FALSE)
-```
+
 
 
 Now i am  startign to replicate daniel hadely code found [here](http://danielphadley.com/ggplot-Logo/)
@@ -17,7 +11,8 @@ here we go
 
 let' first load the required libraries
 
-```{r libs  }
+
+```r
 library(ggplot2)
 library(magick)
 library(magrittr)
@@ -26,7 +21,8 @@ library(magrittr)
 Let's make the ggplot first
 
 
-```{r ggp  }
+
+```r
 ggplot(mpg, aes(displ, hwy, colour = class)) + 
   geom_point() + 
   ggtitle("Cars")  + 
@@ -36,15 +32,19 @@ ggplot(mpg, aes(displ, hwy, colour = class)) +
 	 )
 ```
 
+![plot of chunk ggp](figure/ggp-1.png)
+
 Now time to read the saved image
 
-```{r si  }
+
+```r
 plot <- image_read("./FIGURES/Cars.png")
 ```
 
 Now let's bring in a logo
 
-```{r lg  }
+
+```r
 logo_raw <- image_read("http://hexb.in/hexagons/ggplot2.png") 
 image_write(logo_raw,"./FIGURES/logo.png")
 ```
@@ -53,7 +53,8 @@ now i will show different transformation, it could have been done in one go by p
 
 first up scaling
 
-```{r sc  }
+
+```r
 logo_raw <- image_read("./FIGURES/logo.png")
 logo_raw %>% 
     image_scale("100") %>% 
@@ -73,34 +74,53 @@ basically the above will rescale the image into width of 100px and height will c
 
 now changing the background
 
-```{r bc  }
+
+```r
 logo_raw %>% 
     image_background("grey", flatten=TRUE) %>% 
     image_display()
 ```
 
+```
+  format width height colorspace filesize
+1    PNG   181    210       sRGB        0
+```
+
 now time to add some border
 
-```{r bord  }
+
+```r
 logo_raw %>% 
     image_border("grey", "50x20") %>% 
     image_display()
 ```
 
+```
+  format width height colorspace filesize
+1    PNG   281    250       sRGB        0
+```
+
 the above is pretty obvious, grey back ground with 50px left and right, 20px top and bottom, now let try different border for different sides
 
 
-```{r bd  }
+
+```r
 logo_raw %>% 
     image_border("grey", "20x10x30x10") %>% 
     image_display()
+```
+
+```
+  format width height colorspace filesize
+1    PNG   221    230       sRGB        0
 ```
 
 ah great it just works, awesome
 
 now time to add some text
 
-```{r itxt  }
+
+```r
 logo_raw %>% 
     image_border("grey","50x30") %>% 
     image_background("grey", flatten=TRUE) %>% 
@@ -108,12 +128,18 @@ logo_raw %>%
     image_display()
 ```
 
+```
+  format width height colorspace filesize
+1    PNG   281    270       sRGB        0
+```
+
 let's check out position of the text, by default it starts from top left. Let's say we want to put it in the bottom left. there is the option called "gravity". 
 
 
 
 
-```{r itxt2  }
+
+```r
 logo_raw %>% 
     image_border("grey","50x30") %>% 
     image_background("grey", flatten=TRUE) %>% 
@@ -124,10 +150,16 @@ logo_raw %>%
     image_display()
 ```
 
+```
+  format width height colorspace filesize
+1    PNG   281    270       sRGB        0
+```
+
 
 apart from "gravity" there is another option called location, which we are going to try next
 
-```{r itx3  }
+
+```r
 logo_raw %>% 
     image_border("grey","50x30") %>% 
     image_background("grey", flatten=TRUE) %>% 
@@ -137,7 +169,11 @@ logo_raw %>%
 		   degrees=60,
 		   location="+100+150") %>% 
     image_display()
+```
 
+```
+  format width height colorspace filesize
+1    PNG   281    270       sRGB        0
 ```
 
 first look at the option of location. it is the x-axis and y-axis coordinates from the topleft. so y-axis positive value actually goes down.  it may change with the gravity option. 
